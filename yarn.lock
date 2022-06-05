@@ -30,7 +30,7 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@chainlink/contracts@^0.4.1":
+"@chainlink/contracts@^0.4.0", "@chainlink/contracts@^0.4.1":
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/@chainlink/contracts/-/contracts-0.4.1.tgz#1c4f824920b89fbe5ff2294c35a86bca83c8253d"
   integrity sha512-eC8biY6Ks8k9kZKVt5305veCP3z57yyiy6Os5aR6auta6Bp34xWQ/s4qvrifcW4FNgWw1HJPwMPXDGfiehcLjg==
@@ -666,7 +666,12 @@
     "@types/sinon-chai" "^3.2.3"
     "@types/web3" "1.0.19"
 
-"@openzeppelin/contracts@^4.6.0":
+"@openzeppelin/contracts-upgradeable@^4.5.1":
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-4.6.0.tgz#1bf55f230f008554d4c6fe25eb165b85112108b0"
+  integrity sha512-5OnVuO4HlkjSCJO165a4i2Pu1zQGzMs//o54LPrwUgxvEO2P3ax1QuaSI0cEHHTveA77guS0PnNugpR2JMsPfA==
+
+"@openzeppelin/contracts@^4.4.2", "@openzeppelin/contracts@^4.6.0":
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.6.0.tgz#c91cf64bc27f573836dba4122758b4743418c1b3"
   integrity sha512-8vi4d50NNya/bQqCmaVzvHNmwHvS0OBKb7HNtuNwEE3scXWrP31fKQoGxNMT+KbzmrNZzatE3QK5p2gFONI/hg==
@@ -3371,6 +3376,16 @@ env-paths@^2.2.0:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/env-paths/-/env-paths-2.2.1.tgz#420399d416ce1fbe9bc0a07c62fa68d67fd0f8f2"
   integrity sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==
+
+erc721psi@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/erc721psi/-/erc721psi-0.6.0.tgz#a915457a57165f37a49b577f549ed13054cc1e4e"
+  integrity sha512-dO4uR2jPeTg+KNeKRWinD4WWgmuXlANThdOfwbu9oWFMaXXGUcXddr4qvq/oPXyAvMzmcFs9sfc4uKqNngPTjg==
+  dependencies:
+    "@chainlink/contracts" "^0.4.0"
+    "@openzeppelin/contracts" "^4.4.2"
+    "@openzeppelin/contracts-upgradeable" "^4.5.1"
+    solidity-bits "^0.1.0"
 
 errno@~0.1.1:
   version "0.1.8"
@@ -8601,6 +8616,11 @@ solhint@^3.3.6:
     semver "^6.3.0"
   optionalDependencies:
     prettier "^1.14.3"
+
+solidity-bits@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/solidity-bits/-/solidity-bits-0.1.0.tgz#04a69283977c7b7f809b52e883ced5774e0a3241"
+  integrity sha512-uXoTDTfAeR9xw2xPrGZGd9wraHRW2h6ncrqQGY1kxUDVt8ULQZApBMHnm3sVHzkIujFDzxoz+m6qTagE0PVYAw==
 
 solidity-comments-extractor@^0.0.7:
   version "0.0.7"
