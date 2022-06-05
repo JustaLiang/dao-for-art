@@ -7,7 +7,7 @@ const parseDate = (date: Date) => {
 }
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-  const { deploy, get } = hre.deployments;
+  const { deploy, get, execute } = hre.deployments;
   const { deployer } = await hre.getNamedAccounts();
   const chainId = await hre.getChainId();
   const isMainnet = chainId === "1";
@@ -15,12 +15,12 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const contractURI = "ipfs://QmafcRHT1EwasBR7KteNTmctGGv4mkNAyVfWEwYAfT9XAg/"; // TODO
   const baseURI = "ipfs://QmazDA25V9CyL55vuPJqqAH7dMe5TtAWjH2KdzXKHminH5/" // TODO
   const saleInfo = isMainnet? {
-    isPublic: true,
+    isPublic: false,
     startTime: parseDate(new Date(2022, 6-1, 6)), // TODO
     endTime: parseDate(new Date(2022, 6-1, 7)), // TODO
     price: ethers.utils.parseEther("0.1"),
   }:{
-    isPublic: true,
+    isPublic: false,
     startTime: Math.round(Date.now()/1000) + 60 * 10,
     endTime: Math.round(Date.now()/1000) + 60 * 60 * 24,
     price: ethers.utils.parseEther("0.1"),

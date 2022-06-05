@@ -1,19 +1,13 @@
 import { TypedDataDomain } from "@ethersproject/abstract-signer";
 import { ethers, getNamedAccounts, getChainId } from "hardhat";
-import { ethers as eth } from "ethers";
 import { writeFileSync, readFileSync } from "fs";
-import { NFTVoucher, VOUCHER_TYPE, CONTRACT_ADDRESS } from "../misc/constants";
-
-type SignedResult = {
-  voucher: NFTVoucher,
-  signature: string,
-}
+import { NFTVoucher, SignedResult, VOUCHER_TYPE, CONTRACT_ADDRESS } from "../misc/constants";
 
 async function main() {
   const { deployer } = await getNamedAccounts();
-  console.log("Singer address:", deployer);
   const signer = await ethers.getSigner(deployer);
-  // domain data
+  console.log("Singer address:", signer.address);
+
   const chainId = await getChainId();
 
   const contractAddr = CONTRACT_ADDRESS[chainId];
@@ -21,29 +15,31 @@ async function main() {
     console.log("[ERROR] contract address not set");
     return;
   }
-
+  
   const domainData: TypedDataDomain = {
     name: "MastersDAO",
     version: "1",
     chainId: chainId,
     verifyingContract: contractAddr,
   };
-  const whitelist = readFileSync("./whitelist/whitelist.txt").toString().split("\n");
+  console.log("domain data:", domainData);
+
+  const whitelist = readFileSync(`./whitelist/whitelist_${chainId}.txt`).toString().split("\n");
   const sigMap = new Map<string, SignedResult>();
   await Promise.all(
     whitelist.map(async (list, index) => {
       const struct = list.split(' ');
-      const redeemer = eth.utils.getAddress(struct[0]);
+      const redeemer = ethers.utils.getAddress(struct[0]);
       const amount = parseInt(struct[1]);
       const voucher: NFTVoucher = { 
         index,
-        redeemer,
         amount,
+        redeemer,
       };
       const signature: string = await signer._signTypedData(
         domainData,
         VOUCHER_TYPE,
-        voucher
+        voucher,
       );
       sigMap.set(redeemer, {voucher, signature});
       return signature;

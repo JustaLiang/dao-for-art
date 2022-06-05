@@ -43,7 +43,6 @@ const config: HardhatUserConfig = {
         mnemonic: "test test test test test test test test test test test junk",
       },
       chainId: 1337,
-      
     },
     rinkeby: {
       url: process.env.RINKEBY_URL || "",

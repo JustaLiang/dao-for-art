@@ -4,7 +4,6 @@ pragma solidity ^0.8.4;
 import "erc721psi/contracts/ERC721Psi.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
-import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
 
 contract MastersDAO is ERC721Psi, Ownable, Pausable, EIP712 {
@@ -35,9 +34,9 @@ contract MastersDAO is ERC721Psi, Ownable, Pausable, EIP712 {
     SaleInfo public saleInfo;
 
     struct NFTVoucher {
-        uint16 index;
+        uint256 index;
+        uint256 amount;
         address redeemer;
-        uint16 amount;
     }
 
     constructor(
@@ -50,19 +49,18 @@ contract MastersDAO is ERC721Psi, Ownable, Pausable, EIP712 {
         __baseURI = _baseURI;
         saleInfo = _saleInfo;
         beneficiary = _beneficiary;
-        _pause();
     }
 
-    function mint(uint16 amount) external payable whenNotPaused {
+    function mint(uint8 amount) external payable whenNotPaused {
         require(saleInfo.isPublic, "not in public sale");
         _checkSaleInfo(amount);
-        _mint(msg.sender, amount);
+        _mint(_msgSender(), amount);
     }
 
     function whitelistMint(
         NFTVoucher calldata voucher,
         bytes calldata signature,
-        uint16 amount
+        uint8 amount
     ) external payable whenNotPaused {
         require(!saleInfo.isPublic, "not in whitelist sale");
         if (!_voucherRedeemed.get(voucher.index)) {
@@ -70,23 +68,23 @@ contract MastersDAO is ERC721Psi, Ownable, Pausable, EIP712 {
             whitelistRemain[voucher.redeemer] += voucher.amount;
             _voucherRedeemed.set(voucher.index);
         }
-        require(amount <= whitelistRemain[msg.sender], "not enough remain");
+        require(amount <= whitelistRemain[_msgSender()], "not enough remain");
         _checkSaleInfo(amount);
-        _mint(msg.sender, amount);
-        whitelistRemain[msg.sender] -= amount;
-        if (whitelistRemain[msg.sender] == 0) {
-            delete whitelistRemain[msg.sender];
+        _mint(_msgSender(), amount);
+        whitelistRemain[_msgSender()] -= amount;
+        if (whitelistRemain[_msgSender()] == 0) {
+            delete whitelistRemain[_msgSender()];
         }
     }
 
     function additionalMint(address to, uint256 amount) external whenNotPaused {
-        uint256 remain = itemReservation[msg.sender];
+        uint256 remain = itemReservation[_msgSender()];
         if (remain >= amount) {
             _mint(to, amount);
-            itemReservation[msg.sender] -= amount;
+            itemReservation[_msgSender()] -= amount;
         } else if (remain > 0) {
             _mint(to, remain);
-            itemReservation[msg.sender] -= remain;
+            itemReservation[_msgSender()] -= remain;
         }
     }
 
@@ -126,7 +124,7 @@ contract MastersDAO is ERC721Psi, Ownable, Pausable, EIP712 {
         ERC721Psi._beforeTokenTransfers(from, to, startTokenId, quantity);
     }
 
-    function _checkSaleInfo(uint16 amount) private view {
+    function _checkSaleInfo(uint8 amount) private view {
         require(amount <= BATCH_SIZE, "exceed batch size");
         require(totalSupply() + amount <= ORIGINAL_SUPPLY, "exceed supply");
         require(saleInfo.price * amount >= msg.value, "not enough fund");
@@ -141,11 +139,11 @@ contract MastersDAO is ERC721Psi, Ownable, Pausable, EIP712 {
             keccak256(
                 abi.encode(
                     keccak256(
-                        "NFTVoucher(uin16 index,address redeemer,uint16 amount)"
+                        "NFTVoucher(uint256 index,uint256 amount,address redeemer)"
                     ),
                     voucher.index,
-                    msg.sender,
-                    voucher.amount
+                    voucher.amount,
+                    _msgSender()
                 )
             )
         );
