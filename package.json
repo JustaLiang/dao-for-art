@@ -51,6 +51,10 @@
     "verify": "hardhat etherscan-verify",
     "coverage": "hardhat coverage",
     "localhost": "hardhat node",
-    "console": "hardhat console"
+    "console": "hardhat console",
+    "sign-vouchers": "hardhat run scripts/sign-vouchers.ts"
+  },
+  "dependencies": {
+    "file-system": "^2.2.2"
   }
 }
