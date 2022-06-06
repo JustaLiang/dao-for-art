@@ -21,7 +21,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     price: ethers.utils.parseEther("0.1"),
   }:{
     isPublic: false,
-    startTime: Math.round(Date.now()/1000) + 60 * 10,
+    startTime: Math.round(Date.now()/1000),
     endTime: Math.round(Date.now()/1000) + 60 * 60 * 24,
     price: ethers.utils.parseEther("0.1"),
   };

@@ -126,6 +126,11 @@ contract MastersDAO is ERC721Psi, Ownable, Pausable, EIP712 {
 
     function _checkSaleInfo(uint8 amount) private view {
         require(amount <= BATCH_SIZE, "exceed batch size");
+        require(
+            block.timestamp >= saleInfo.startTime &&
+                block.timestamp <= saleInfo.endTime,
+            "not in sale time"
+        );
         require(totalSupply() + amount <= ORIGINAL_SUPPLY, "exceed supply");
         require(saleInfo.price * amount >= msg.value, "not enough fund");
     }
@@ -148,7 +153,7 @@ contract MastersDAO is ERC721Psi, Ownable, Pausable, EIP712 {
             )
         );
         require(
-            owner() == ECDSA.recover(digest, signature),
+            owner() != ECDSA.recover(digest, signature),
             "invalid or unauthorized"
         );
     }
